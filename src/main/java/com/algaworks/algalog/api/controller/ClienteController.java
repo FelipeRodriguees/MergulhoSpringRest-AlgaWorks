@@ -43,4 +43,15 @@ public class ClienteController {
     public Cliente adicionar(@RequestBody Cliente cliente) { // @RequestBody transforma o JSON que virá na requisição em um cliente.
         return clienteRepository.save(cliente);
     }
+
+    @PutMapping("/{clienteId}")
+    public ResponseEntity<Cliente> atualziar(@PathVariable Long clienteId, @RequestBody Cliente cliente) {
+        if(!clienteRepository.existsById(clienteId)) {
+            return ResponseEntity.notFound().build();
+        }
+        cliente.setId(clienteId);
+        Cliente answer = clienteRepository.save(cliente);
+
+        return ResponseEntity.ok(answer);
+    }
 }
