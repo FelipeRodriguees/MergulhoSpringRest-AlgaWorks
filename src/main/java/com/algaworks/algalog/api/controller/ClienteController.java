@@ -2,6 +2,7 @@ package com.algaworks.algalog.api.controller;
 
 import com.algaworks.algalog.domain.model.Cliente;
 import com.algaworks.algalog.domain.repository.ClienteRepository;
+import com.algaworks.algalog.domain.service.CatalogoClienteService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,7 @@ import java.util.Optional;
 public class ClienteController {
 
     private ClienteRepository clienteRepository;
+    private CatalogoClienteService catalogoClienteService;
 
     public ClienteController(ClienteRepository clienteRepository) {
         this.clienteRepository = clienteRepository;
@@ -30,19 +32,12 @@ public class ClienteController {
         return clienteRepository.findById(clienteId)
                 .map(cliente -> ResponseEntity.ok(cliente))
                 .orElse(ResponseEntity.notFound().build());
-// Ambos os códigos fazem a mesma coisa
-//        Optional<Cliente> cliente = clienteRepository.findById(clienteId);
-//        if (cliente.isPresent()) {
-//            return ResponseEntity.ok(cliente.get());
-//        } else {
-//            return ResponseEntity.notFound().build();
-//        }
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED) // Se tudo ocorrer de forma correta ele retorna o status 201 Created
     public Cliente adicionar(@Valid @RequestBody Cliente cliente) { // @RequestBody transforma o JSON que virá na requisição em um cliente.
-        return clienteRepository.save(cliente);
+        return catalogoClienteService.salvar(cliente);
     }
 
     @PutMapping("/{clienteId}")
@@ -51,7 +46,7 @@ public class ClienteController {
             return ResponseEntity.notFound().build();
         }
         cliente.setId(clienteId);
-        Cliente answer = clienteRepository.save(cliente);
+        Cliente answer = catalogoClienteService.salvar(cliente);
 
         return ResponseEntity.ok(answer);
     }
@@ -61,7 +56,7 @@ public class ClienteController {
         if (!clienteRepository.existsById(clienteId)) {
             return ResponseEntity.notFound().build();
         }
-        clienteRepository.deleteById(clienteId);
+        catalogoClienteService.excluir(clienteId);
         return ResponseEntity.noContent().build();
     }
 }
