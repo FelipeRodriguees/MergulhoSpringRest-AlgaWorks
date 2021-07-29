@@ -17,7 +17,7 @@ public class CatalogoClienteService {
     public Cliente salvar(Cliente cliente) {
         boolean emailEmUso = clienteRepository.findByEmail(cliente.getEmail())
                 .stream()
-                .anyMatch(clienteExistente -> !clienteExistente.equals(cliente));
+                .anyMatch(clienteExistente -> !clienteExistente.equals(cliente.getEmail()));
 
         if (emailEmUso) {
             throw new NegocioExcpetion("Já existe um cliente com este e-mail!");
