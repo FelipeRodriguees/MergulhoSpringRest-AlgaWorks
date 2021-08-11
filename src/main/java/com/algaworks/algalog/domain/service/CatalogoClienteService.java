@@ -13,6 +13,11 @@ public class CatalogoClienteService {
 
     private ClienteRepository clienteRepository;
 
+    public Cliente buscar(Long clienteId) {
+        return clienteRepository.findById(clienteId)
+                .orElseThrow(() -> new NegocioExcpetion("Cliente não encontrado!"));
+    }
+
     @Transactional // Está anotação da um rollback de todas as alterações no banco caso algo de errado ocorra.
     public Cliente salvar(Cliente cliente) {
         boolean emailEmUso = clienteRepository.findByEmail(cliente.getEmail())

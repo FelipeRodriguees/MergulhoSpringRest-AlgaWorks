@@ -1,5 +1,6 @@
 package com.algaworks.algalog.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
@@ -23,9 +24,14 @@ public class Entrega {
 
     private BigDecimal taxa;
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @Enumerated(EnumType.STRING) // Fala que na coluna status na tabela so vai armazenar String.
-    private StatusEntrega statusEntrega;
+    private StatusEntrega status;
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDateTime dataPedido;
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDateTime dataFinalizacao;
 
     public Long getId() {
@@ -60,12 +66,12 @@ public class Entrega {
         this.taxa = taxa;
     }
 
-    public StatusEntrega getStatusEntrega() {
-        return statusEntrega;
+    public StatusEntrega getStatus() {
+        return status;
     }
 
-    public void setStatusEntrega(StatusEntrega statusEntrega) {
-        this.statusEntrega = statusEntrega;
+    public void setStatus(StatusEntrega status) {
+        this.status = status;
     }
 
     public LocalDateTime getDataPedido() {
