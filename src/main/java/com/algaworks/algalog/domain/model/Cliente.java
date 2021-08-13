@@ -1,5 +1,6 @@
 package com.algaworks.algalog.domain.model;
 
+import com.algaworks.algalog.domain.ValidationGroups;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -7,6 +8,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @EqualsAndHashCode(onlyExplicitlyIncluded = true) // Gera os equals e os hash para os atributos escolhidos.
@@ -17,6 +19,7 @@ import javax.validation.constraints.Size;
 // Caso o nome da tabela seja diferente do nome da classe se usa o @Table(name = "nomeTabela").
 public class Cliente {
 
+    @NotNull(groups = ValidationGroups.ClienteId.class)
     @EqualsAndHashCode.Exclude // Seleciona para gerar os equals e hash code.
     @Id // Identifica a chave primária.
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Define a geração do Id para o padrão do banco(deixa como auto incremento)
