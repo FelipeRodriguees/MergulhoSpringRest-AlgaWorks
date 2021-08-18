@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @AllArgsConstructor
 @Service
@@ -28,7 +29,7 @@ public class SolicitacaoEntregaService {
 
         entrega.setCliente(cliente);
         entrega.setStatus(StatusEntrega.PENDENTE);
-        entrega.setDataPedido(LocalDateTime.now());
+        entrega.setDataPedido(OffsetDateTime.now());
 
         return entregaRepository.save(entrega);
     }

@@ -1,5 +1,7 @@
 package com.algaworks.algalog.api.controller;
 
+import com.algaworks.algalog.api.model.DestinatarioRepresentationModel;
+import com.algaworks.algalog.api.model.EntregaRepresentationModel;
 import com.algaworks.algalog.domain.model.Entrega;
 import com.algaworks.algalog.domain.repository.EntregaRepository;
 import com.algaworks.algalog.domain.service.SolicitacaoEntregaService;
@@ -32,9 +34,30 @@ public class EntregaController {
     }
 
     @GetMapping("/{entregaId}")
-    public ResponseEntity<Entrega> buscar(@PathVariable Long entregaId) {
+    public ResponseEntity<EntregaRepresentationModel> buscar(@PathVariable Long entregaId) {
         return entregaRepository.findById(entregaId)
-                .map(entrega -> ResponseEntity.ok(entrega))
-                .orElse(ResponseEntity.notFound().build());
+                .map(entrega -> {
+                    EntregaRepresentationModel entregaRepresentationModel = new EntregaRepresentationModel();
+
+                    entregaRepresentationModel.setId(entrega.getId());
+                    entregaRepresentationModel.setNomeCliente(entrega.getCliente().getNome());
+
+                    DestinatarioRepresentationModel destinatarioRepresentationModel = new DestinatarioRepresentationModel();
+                    destinatarioRepresentationModel.setNome(entrega.getDestinatario().getNome());
+                    destinatarioRepresentationModel.setLogradouro(entrega.getDestinatario().getLogradouro());
+                    destinatarioRepresentationModel.setNumero(entrega.getDestinatario().getNumero());
+                    destinatarioRepresentationModel.setComplemento(entrega.getDestinatario().getNumero());
+                    destinatarioRepresentationModel.setComplemento(entrega.getDestinatario().getComplemento());
+                    destinatarioRepresentationModel.setBairro(entrega.getDestinatario().getBairro());
+
+                    entregaRepresentationModel.setDestinatario(destinatarioRepresentationModel);
+                    entregaRepresentationModel.setTaxa(entrega.getTaxa());
+                    entregaRepresentationModel.setStatus(entrega.getStatus());
+                    entregaRepresentationModel.setDataPedido(entrega.getDataPedido());
+                    entregaRepresentationModel.setDateFinalizacao(entrega.getDataFinalizacao());
+
+
+                    return ResponseEntity.ok(entregaRepresentationModel);
+                }).orElse(ResponseEntity.notFound().build());
     }
 }
