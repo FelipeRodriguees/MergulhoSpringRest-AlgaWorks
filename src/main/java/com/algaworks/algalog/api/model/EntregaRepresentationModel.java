@@ -1,5 +1,6 @@
 package com.algaworks.algalog.api.model;
 
+import com.algaworks.algalog.domain.model.Cliente;
 import com.algaworks.algalog.domain.model.StatusEntrega;
 
 import java.math.BigDecimal;
@@ -8,7 +9,7 @@ import java.time.OffsetDateTime;
 public class EntregaRepresentationModel {
 
     private Long id;
-    private String nomeCliente;
+    private ClienteSimpleModel cliente;
     private DestinatarioRepresentationModel destinatario;
     private BigDecimal taxa;
     private StatusEntrega status;
@@ -23,12 +24,12 @@ public class EntregaRepresentationModel {
         this.id = id;
     }
 
-    public String getNomeCliente() {
-        return nomeCliente;
+    public ClienteSimpleModel getCliente() {
+        return cliente;
     }
 
-    public void setNomeCliente(String nomeCliente) {
-        this.nomeCliente = nomeCliente;
+    public void setCliente(ClienteSimpleModel cliente) {
+        this.cliente = cliente;
     }
 
     public DestinatarioRepresentationModel getDestinatario() {
