@@ -12,6 +12,8 @@ import javax.validation.groups.Default;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
@@ -35,6 +37,9 @@ public class Entrega {
 
     @NotNull
     private BigDecimal taxa;
+
+    @OneToMany(mappedBy = "entrega") // Recebo o nome da propriedade dona do relacionamento do lado inverso.
+    private List<Ocorrencia> ocorrencias = new ArrayList<>();
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @Enumerated(EnumType.STRING) // Fala que na coluna status na tabela so vai armazenar String.
@@ -78,6 +83,14 @@ public class Entrega {
         this.taxa = taxa;
     }
 
+    public List<Ocorrencia> getOcorrencias() {
+        return ocorrencias;
+    }
+
+    public void setOcorrencias(List<Ocorrencia> ocorrencias) {
+        this.ocorrencias = ocorrencias;
+    }
+
     public StatusEntrega getStatus() {
         return status;
     }
@@ -100,5 +113,15 @@ public class Entrega {
 
     public void setDataFinalizacao(OffsetDateTime dataFinalizacao) {
         this.dataFinalizacao = dataFinalizacao;
+    }
+
+    public Ocorrencia adicionarOcorrencia(String descricao) {
+        Ocorrencia ocorrencia = new Ocorrencia();
+        ocorrencia.setDescricao(descricao);
+        ocorrencia.setDataRegistro(OffsetDateTime.now());
+        ocorrencia.setEntrega(this);
+
+        this.getOcorrencias().add(ocorrencia);
+        return ocorrencia;
     }
 }
