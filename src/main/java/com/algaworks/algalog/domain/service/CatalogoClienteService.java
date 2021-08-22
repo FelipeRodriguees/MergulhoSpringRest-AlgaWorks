@@ -1,5 +1,6 @@
 package com.algaworks.algalog.domain.service;
 
+import com.algaworks.algalog.api.model.ClienteRepresentationModel;
 import com.algaworks.algalog.domain.exception.NegocioExcpetion;
 import com.algaworks.algalog.domain.model.Cliente;
 import com.algaworks.algalog.domain.repository.ClienteRepository;
@@ -7,11 +8,17 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @AllArgsConstructor
 @Service // Representa que a classe é um componente Spring com uma semântica de um serviço
 public class CatalogoClienteService {
 
     private ClienteRepository clienteRepository;
+
+    public List<Cliente> listar() {
+        return clienteRepository.findAll();
+    }
 
     public Cliente buscar(Long clienteId) {
         return clienteRepository.findById(clienteId)

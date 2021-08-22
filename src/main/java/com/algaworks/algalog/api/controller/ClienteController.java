@@ -1,5 +1,7 @@
 package com.algaworks.algalog.api.controller;
 
+import com.algaworks.algalog.api.assembler.ClienteAssembler;
+import com.algaworks.algalog.api.model.ClienteRepresentationModel;
 import com.algaworks.algalog.domain.model.Cliente;
 import com.algaworks.algalog.domain.repository.ClienteRepository;
 import com.algaworks.algalog.domain.service.CatalogoClienteService;
@@ -18,16 +20,18 @@ public class ClienteController {
 
     private ClienteRepository clienteRepository;
     private CatalogoClienteService catalogoClienteService;
+    private ClienteAssembler clienteAssembler;
 
     @GetMapping
-    public List<Cliente> listar(){
-        return clienteRepository.findAll();
+    public List<ClienteRepresentationModel> listar(){
+        List<Cliente> clientes = catalogoClienteService.listar();
+        return clienteAssembler.toCollectionModel(clientes);
     }
 
     @GetMapping("/{clienteId}")
-    public ResponseEntity<Cliente> buscar(@PathVariable Long clienteId) { // @PathVariable define um caminho para a variável que virá na requisição.
+    public ResponseEntity<ClienteRepresentationModel> buscar(@PathVariable Long clienteId) { // @PathVariable define um caminho para a variável que virá na requisição.
         return clienteRepository.findById(clienteId)
-                .map(cliente -> ResponseEntity.ok(cliente))
+                .map(cliente -> ResponseEntity.ok(clienteAssembler.toModel(cliente)))
                 .orElse(ResponseEntity.notFound().build());
     }
 
@@ -38,14 +42,14 @@ public class ClienteController {
     }
 
     @PutMapping("/{clienteId}")
-    public ResponseEntity<Cliente> atualziar(@Valid @PathVariable Long clienteId, @RequestBody Cliente cliente) {
+    public ResponseEntity<ClienteRepresentationModel> atualziar(@Valid @PathVariable Long clienteId, @RequestBody Cliente cliente) {
         if(!clienteRepository.existsById(clienteId)) {
             return ResponseEntity.notFound().build();
         }
         cliente.setId(clienteId);
         Cliente answer = catalogoClienteService.salvar(cliente);
 
-        return ResponseEntity.ok(answer);
+        return ResponseEntity.ok(clienteAssembler.toModel(answer));
     }
 
     @DeleteMapping("/{clienteId}")
