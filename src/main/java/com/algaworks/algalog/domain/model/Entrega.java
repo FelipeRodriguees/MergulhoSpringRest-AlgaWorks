@@ -38,7 +38,7 @@ public class Entrega {
     @NotNull
     private BigDecimal taxa;
 
-    @OneToMany(mappedBy = "entrega") // Recebo o nome da propriedade dona do relacionamento do lado inverso.
+    @OneToMany(mappedBy = "entrega", cascade = CascadeType.ALL) // Recebo o nome da propriedade dona do relacionamento do lado inverso.
     private List<Ocorrencia> ocorrencias = new ArrayList<>();
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
